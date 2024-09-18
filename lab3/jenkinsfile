@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Step 1: Переконайся, що у нас є всі необхідні пакети
+echo "Installing dependencies..."
+pip install -r requirements.txt
+
+# Step 2: Запуск збірки
+echo "Building the project..."
+# Для Python проєктів зазвичай немає явного кроку збірки, але ми можемо перевірити, що код синтаксично правильний
+python -m py_compile main_program.py
+
+if [ $? -ne 0 ]; then
+    echo "Build failed!"
+    exit 1
+else
+    echo "Build successful!"
+fi
+
+# Step 3: Запуск тестів
+echo "Running tests..."
+python -m unittest discover -s . -p "test_*.py"
+
+if [ $? -ne 0 ]; then
+    echo "Tests failed!"
+    exit 1
+else
+    echo "All tests passed!"
+fi
