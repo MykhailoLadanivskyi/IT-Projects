@@ -1,17 +1,19 @@
-pipeline{
+pipeline {
     agent any
 
     stages {
         stage('Build') {
             steps {
-                bat "mvn compile"
-                bat "mvn clean package"
-
+                // Переконайся, що Jenkins виконує ці команди у правильному контексті
+                bat "mvn clean compile"
+                bat "mvn package"
             }
-
             post {
                 success {
-                    archiveArtifacts 'target/*.jar'
+                    archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
+                }
+                failure {
+                    echo 'Build failed!'
                 }
             }
         }
